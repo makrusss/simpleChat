@@ -22,3 +22,14 @@ This is a simple live chat application built with HTML, CSS, and JavaScript, usi
 
    ```shell
    git clone <repository-url>
+
+2. Instal Depedencies : 
+cd live-chat-application
+npm install
+
+
+### Usage 
+
+1. Start the Server : 
+ lalalalal
+
