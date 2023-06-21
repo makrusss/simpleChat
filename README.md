@@ -14,7 +14,7 @@ This is a simple live chat application built with HTML, CSS, and JavaScript, usi
 
 ### Prerequisites
 
-- Node.js (v14 or above) installed on your machine
+- Node.js installed on your machine
 
 ### Installation
 
@@ -23,13 +23,12 @@ This is a simple live chat application built with HTML, CSS, and JavaScript, usi
    ```shell
    git clone <repository-url>
 
-2. Instal Depedencies : 
-cd live-chat-application
-npm install
+2. Instal Depedencies:
 
+   ```shell
+   cd simpleChat
 
-### Usage 
+3. Run app:
 
-1. Start the Server : 
- lalalalal
-
+   ```shell
+   node server.js --> <open localhost:3000>
