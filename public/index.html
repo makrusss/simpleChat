@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Live Chat</title>
+  <style>
+    /* CSS styles here */
+    body {
+      background-color: #111;
+      color: #fff;
+      font-family: Arial, sans-serif;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    .chat-container {
+      max-height: 400px;
+      overflow-y: scroll;
+      background-color: #222;
+      padding: 10px;
+    }
+
+    .chat-bubble {
+      margin-bottom: 10px;
+      padding: 5px;
+      background-color: #444;
+      border-radius: 5px;
+    }
+
+    .input-container {
+      display: flex;
+      margin-top: 10px;
+    }
+
+    #message-input {
+      flex: 1;
+      padding: 5px;
+    }
+
+    #send-button {
+      padding: 5px 10px;
+      background-color: #888;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Live Chat Requested by Kola. Tq</h1>
+
+    <div id="chat-container" class="chat-container"></div>
+
+    <div class="input-container">
+      <input type="text" id="message-input" placeholder="Type your message..." />
+      <button id="send-button">Send</button>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.2.0/socket.io.js"></script>
+  <script>
+    const socket = io();
+
+    let chat = [];
+    let username = null;
+
+    function renderChat() {
+      const chatContainer = document.getElementById('chat-container');
+      chatContainer.innerHTML = '';
+
+      chat.forEach(message => {
+        const chatBubble = document.createElement('div');
+        chatBubble.textContent = message;
+        chatBubble.classList.add('chat-bubble');
+        chatContainer.appendChild(chatBubble);
+      });
+
+      chatContainer.scrollTop = chatContainer.scrollHeight;
+    }
+
+    document.getElementById('send-button').addEventListener('click', function() {
+      const messageInput = document.getElementById('message-input');
+      const message = messageInput.value.trim();
+
+      if (message) {
+        const newMessage = `${username}: ${message}`;
+        chat.push(newMessage);
+        renderChat();
+        socket.emit('message', { username, message });
+        messageInput.value = '';
+      }
+    });
+
+    if (!username) {
+      const modal = document.createElement('div');
+      modal.classList.add('modal');
+      modal.innerHTML = `
+        <div class="modal-content">
+          <h2>Enter Your Username</h2>
+          <input type="text" id="username-input" placeholder="Username" />
+          <button id="submit-button">Submit</button>
+        </div>
+      `;
+
+      document.body.appendChild(modal);
+
+      document.getElementById('submit-button').addEventListener('click', function() {
+        const usernameInput = document.getElementById('username-input');
+        const enteredUsername = usernameInput.value.trim();
+
+        if (enteredUsername) {
+          username = enteredUsername;
+          localStorage.setItem('username', username);
+
+          modal.style.display = 'none';
+        }
+      });
+    }
+
+    socket.on('connect', function() {
+      const storedUsername = localStorage.getItem('username');
+
+      if (storedUsername) {
+        username = storedUsername;
+      }
+    });
+
+    // ...
+
+socket.on('message', function(chatMessage) {
+  const { sender, message } = chatMessage;
+  const newMessage = `${sender}: ${message}`;
+
+  if (!chat.includes(newMessage)) {
+    chat.push(newMessage);
+    renderChat();
+  }
+});
+
+  </script>
+</body>
+</html>
