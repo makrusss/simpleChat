@@ -1,8 +1,8 @@
 const express = require('express');
 const cors = require('cors'); // Import the cors module
 const app = express();
-const http = require('http').createServer(app);
-const io = require('socket.io')(http); // Fix the socket initialization
+const https = require('http').createServer(app);
+const io = require('socket.io')(https); // Fix the socket initialization
 
 app.use(cors()); // Enable CORS for all routes
 app.use(express.static(__dirname + '/public'));
